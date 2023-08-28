@@ -171,19 +171,19 @@ for DAY in days_list:
     data.dropna(inplace = True)
     data.to_pickle(f'/mnt/locutus/remotesensing/r62/fire_danger/binary_data/DF_{month}-{day_of_month}-{year}.pkl')
     
-#     if DAY == days_list[0]:
-#         IDXS = np.array(data.pixel_ID)
-#     else:
-#         IDXS = np.intersect1d(IDXS, np.array(data.pixel_ID))
-#     print(f'{month}-{day_of_month}-{year}')
+    if DAY == days_list[0]:
+        IDXS = np.array(data.pixel_ID)
+    else:
+        IDXS = np.intersect1d(IDXS, np.array(data.pixel_ID))
+    print(f'{month}-{day_of_month}-{year}')
 
-# np.save('/mnt/locutus/remotesensing/r62/fire_danger/binary_data/PIXEL_IDS.npy', IDXS)
-# os.chdir('/mnt/locutus/remotesensing/r62/fire_danger/binary_data/')
-# for f in [f for f in os.listdir() if f.startswith('DF')]:
-#     df = pd.read_pickle(f)
-#     df = df[df.pixel_ID.isin(IDXS)]
-#     df.set_index("pixel_ID", inplace = True, drop = True)
-#     df.to_pickle(f'./{f}')
+np.save('/mnt/locutus/remotesensing/r62/fire_danger/binary_data/PIXEL_IDS.npy', IDXS)
+os.chdir('/mnt/locutus/remotesensing/r62/fire_danger/binary_data/')
+for f in [f for f in os.listdir() if f.startswith('DF')]:
+    df = pd.read_pickle(f)
+    df = df[df.pixel_ID.isin(IDXS)]
+    df.set_index("pixel_ID", inplace = True, drop = True)
+    df.to_pickle(f'./{f}')
 	
 end = TM.time()
 complete = (end-start)/60

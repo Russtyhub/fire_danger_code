@@ -85,8 +85,7 @@ with rasterio.open(target_raster) as src1:
 
 fuel_values_tif = rasterio.open('/mnt/locutus/remotesensing/r62/fire_danger/temporary/CA_FUELS_LC22_F40_220_REPROJECTED_RESAMPLED.tif')
 fuel_values = fuel_values_tif.read(1)
-fuel_values_shape = fuel_values.shape
-# print('FUEL SCORES:', fuel_values_shape)
+# print('FUEL SCORES:', fuel_values.shape)
 
 # Creating Time Sequence
 
@@ -97,24 +96,29 @@ days_list = create_list_of_dates(start_date, end_date, x_days=1)
 start = TM.time()
 for DAY in days_list:
     
-    data = [np.arange(fuel_values.shape[0]*fuel_values.shape[1]), fuel_values.flatten()]
-
+    # Create a grid that is used for labeling. Then add that to our data list
+    labels_grid = np.arange(fuel_values.shape[0]*fuel_values.shape[1]).reshape(fuel_values.shape)
+    data = [labels_grid, fuel_values]
+    # Get temporal statistics
     day_of_year = format_with_zeros(DAY.timetuple().tm_yday, 3)
     year = str(DAY.year)
     month = format_with_zeros(DAY.month, 2)
     day_of_month = format_with_zeros(DAY.day, 2)
+    # Adding the radians 
+    rads = (int(day_of_year)-1)*(360/364)*(np.pi / 180)
+    data.append(np.cos(rads)*np.ones(fuel_values.shape))
+    data.append(np.sin(rads)*np.ones(fuel_values.shape))
 
     # FIRE DANGER SCORES
 
     if os.path.exists(f'{fire_scores_dir}reproj_{year}{month}{day_of_month}_{year}{month}{day_of_month}.tiff'):
         fire_danger_score_tif = rasterio.open(f'{fire_scores_dir}reproj_{year}{month}{day_of_month}_{year}{month}{day_of_month}.tiff')
         fire_danger_score_data = find_bbox_within_tif(fire_danger_score_tif)
-        data.append(fire_danger_score_data.flatten())
-        fire_danger_score_shape = fire_danger_score_data.shape
+        data.append(fire_danger_score_data)
+        # print('FIRE DANGER DATA SHAPE:', fire_danger_score_data.shape)
     else:
         continue
 
-    # print('FIRE DANGER SHAPE', fire_danger_score_shape)
 
     # NDVI 
 
@@ -131,60 +135,39 @@ for DAY in days_list:
     if os.path.exists(f'{temp_tif_dir}{closest_tif_name}'):
         closest_ndvi_tif = rasterio.open(f'{temp_tif_dir}{closest_tif_name}')
         closest_ndvi_data = np.squeeze(closest_ndvi_tif.read())
-        data.append(closest_ndvi_data.flatten())
-        closest_ndvi_shape = closest_ndvi_data.shape
-        # print('NDVI SHAPE', closest_ndvi_shape)
+        data.append(closest_ndvi_data)
+        # print('NDVI SHAPE', closest_ndvi_data.shape)
+
     else:
         closest_ndvi_tif = gdal.Open(f'{MODIS_dir}{closest_tif_name}')
         gdal.Warp(f'{temp_tif_dir}{closest_tif_name}', closest_ndvi_tif, xRes = src1.res[0], yRes = src1.res[1])
         closest_ndvi_tif = rasterio.open(f'{temp_tif_dir}{closest_tif_name}')
         closest_ndvi_data = np.squeeze(closest_ndvi_tif.read())
-        data.append(closest_ndvi_data.flatten())
-        closest_ndvi_shape = closest_ndvi_data.shape
-        # print('NDVI SHAPE', closest_ndvi_shape)
+        data.append(closest_ndvi_data)
+        # print('NDVI SHAPE', closest_ndvi_data.shape)
 
     # DAYMET 
 
     daymet_files = [i for i in os.listdir(daymet_dir) if i.endswith('.tif') and (i.split('_')[1] == year)]
-    columns = []
+    daymet_files.sort()
     for f in daymet_files:
         if os.path.exists(f'{temp_tif_dir}{f}'):
             FILE = rasterio.open(f'{temp_tif_dir}{f}')
             var_data = FILE.read(int(day_of_year))
-            data.append(var_data.flatten())
-            columns.append(f.split('_')[0])
+            data.append(var_data)
         else:
             FILE = gdal.Open(f'{daymet_dir}{f}')
             gdal.Warp(f'{temp_tif_dir}{f}', FILE, xRes = src1.res[0]-0.00002, yRes = src1.res[1]-0.00002) # -0.00002
             FILE = rasterio.open(f'{temp_tif_dir}{f}')
-            # data = find_bbox_within_tif(FILE)
             var_data = FILE.read(int(day_of_year))
-            data.append(var_data.flatten())
-            columns.append(f.split('_')[0])
+            data.append(var_data)
 
-    data = np.stack(data)
-    data = data.T
-    data = pd.DataFrame(data)
-    data.columns = ['pixel_ID', 'fuel', 'danger_score', 'ndvi', ] + columns
-    data[data == -9999.0] = np.nan
-    data[data.danger_score > 247] = np.nan
-    data.dropna(inplace = True)
-    # data.to_pickle(f'/mnt/locutus/remotesensing/r62/fire_danger/binary_data/DF_{month}-{day_of_month}-{year}.pkl')
-    
-    if DAY == days_list[0]:
-        IDXS = np.array(data.pixel_ID)
-    else:
-        IDXS = np.intersect1d(IDXS, np.array(data.pixel_ID))
-    print(f'{month}-{day_of_month}-{year}')
+    data = np.stack(data, axis=0)
+    # print(data.shape)
+    # Columns order: Index label, cos_rads, sin_rads, fire_danger_score_data, NDVI, prcp, srad, swe, tmax, tmin, vp
 
-np.save('/mnt/locutus/remotesensing/r62/fire_danger/binary_data/PIXEL_IDS.npy', IDXS)
-os.chdir('/mnt/locutus/remotesensing/r62/fire_danger/binary_data/')
-for f in [f for f in os.listdir() if f.startswith('DF')]:
-    df = pd.read_pickle(f)
-    df = df[df.pixel_ID.isin(IDXS)]
-    df.set_index("pixel_ID", inplace = True, drop = True)
-    df.to_pickle(f'./{f}')
-	
+    np.save(f'/mnt/locutus/remotesensing/r62/fire_danger/binary_data_maps/{month}-{day_of_month}-{year}.npy', data[1:, ...])
+    print(f'FILE: {month}-{day_of_month}-{year}.npy SAVED')
 end = TM.time()
 complete = (end-start)/60
 print('COMPLETE TIME ELAPSED:', round(complete, 2), 'MINUTES')
