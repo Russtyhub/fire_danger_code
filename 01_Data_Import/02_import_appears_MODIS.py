@@ -10,13 +10,14 @@ import geopandas as gpd
 api = 'https://appeears.earthdatacloud.nasa.gov/api/'
 
 user = getpass.getpass(prompt = 'Enter username (Russ_Earth_Data)')
-password = getpass.getpass(prompt = 'Enter password: (-gEtT7Mv/e7W#Cg)') 
+password = getpass.getpass(prompt = 'Enter password: (Rockytop0153!)')
+token_response = r.post(f'{api}login', auth=(user, password)).json()  # Insert API URL, call login service, provide credentials & return json
+
 shp_file_path = '/mnt/locutus/remotesensing/r62/fire_danger/California_State_Boundary/California_State_Boundary.shp'
 task_name = input('Enter a Task Name: ')
 output_dir = '/mnt/locutus/remotesensing/r62/fire_danger'
 
 # SETTING UP MY TOKEN:
-token_response = r.post('{}login'.format(api), auth=(user,password)).json() 
 del user, password
 token = token_response['token']
 head = {'Authorization': 'Bearer {}'.format(token)} 
@@ -64,7 +65,7 @@ outFormat = ['geotiff']  # Set output file format type
 startDate = '01-01'            # Start of the date range 
 endDate = '12-31'              # End of the date range
 recurring = True                   # Specify True for a recurring date
-yearRange = [2020, 2022]
+yearRange = [2020, 2023]
 
 task = {
     'task_type': task_type[1],
@@ -119,4 +120,4 @@ for f in files:
     filepath = os.path.join(destDir, filename) # Create output file path
     with open(filepath, 'wb') as f: # Write file to dest dir
         for data in dl.iter_content(chunk_size=8192): f.write(data) 
-print('Downloaded files can be found at: {}'.format(destDir))
+print(f'Downloaded files can be found at: {destDir}')

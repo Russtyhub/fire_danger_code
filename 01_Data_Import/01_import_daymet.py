@@ -2,20 +2,15 @@
 # conda activate r62GEDI
 
 import geopandas as gpd
-import matplotlib.pyplot as plt
 import requests
-import pyproj
 import datetime as dt 
-from rasterio.features import Affine
 from pydap.client import open_url
-from pydap.cas.urs import setup_session
 import xarray as xr
-import rioxarray
-import shapely
-import rasterio
-import time
-from shapely.geometry import mapping
 import os
+import sys
+sys.path.append('/home/r62/repos/russ_repos/Functions')
+
+from STANDARD_FUNCTIONS import runcmd
 
 #########################################################################################################################
 
@@ -23,9 +18,11 @@ geojson_path = '/mnt/locutus/remotesensing/r62/fire_danger/California_State_Boun
 output_path = '/mnt/locutus/remotesensing/r62/fire_danger/daymet'
 
 start_date = dt.datetime(2020, 1, 1)
-end_date = dt.datetime(2022, 12, 31)
+end_date = dt.datetime(2023, 12, 31)
 
 VARS = ['prcp', 'srad', 'swe', 'tmax', 'tmin', 'vp'] # omitting dayl
+convert_to_tif = True
+
 ######################################################################################################
 
 ca_geojson_4326 = gpd.read_file(geojson_path)
@@ -93,3 +90,11 @@ for g_name in granule_names:
                                       ca_gpd_lcc.bounds.miny[0]))
 
         ds.to_netcdf(f'{output_path}/{g_name}')
+
+if convert_to_tif:
+    os.chdir(output_path)
+    daymet_files = [i for i in os.listdir() if i.startswith('daymet_v4_daily') and i.endswith('.nc')]
+
+    for daymet_file in daymet_files:
+        new_name = daymet_file[:-2] + 'tif'
+        runcmd(f'gdal_translate -of GTiff NETCDF:"{daymet_file}" {new_name}')
