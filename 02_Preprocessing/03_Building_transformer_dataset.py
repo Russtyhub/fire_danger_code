@@ -21,8 +21,9 @@ class_label = 'ALL'
 BATCH_SAMPLE = None
 start_date = date(2020, 1, 1)
 end_date = date(2023, 12, 31)
+LOOKBACK_WINDOW = 14
 DIR = '/mnt/locutus/remotesensing/r62/fire_danger/normed_maps_V2/'
-OUTPUT_DIR = '/mnt/locutus/remotesensing/r62/fire_danger/pre_transformer/full_datasets/'
+OUTPUT_DIR = f'/mnt/locutus/remotesensing/r62/fire_danger/pre_transformer/full_datasets/lookback_{LOOKBACK_WINDOW}'
 
 # The order of the numpy arrays:
 # cos_rads, sin_rads, fire_danger_score_data, NDVI, prcp, srad, swe, tmax, tmin, vp
@@ -69,11 +70,11 @@ for idx, file_name in enumerate(tqdm(sorted_files, desc="Processing files")):
 	current_date_str = str(current_date).split(' ')[0]
 
 	# Check if there are at least 30 prior files
-	if idx >= 30:
-		START_DATE = datetime.strptime(sorted_files[idx - 30][:-4], '%m-%d-%Y')
+	if idx >= LOOKBACK_WINDOW:
+		START_DATE = datetime.strptime(sorted_files[idx - LOOKBACK_WINDOW][:-4], '%m-%d-%Y')
 
 		# Check if all required files in the lookback window exist
-		lookback_window = [START_DATE + timedelta(days=j) for j in range(30)]
+		lookback_window = [START_DATE + timedelta(days=j) for j in range(LOOKBACK_WINDOW)]
 		# note: required_files sometimes gets really big (bigger than 30) because
 		# there are some instances where there are gaps in the available data of the 
 		# time series. This is accounted for below at the next if statement:

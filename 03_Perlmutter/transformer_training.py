@@ -21,7 +21,6 @@ import copy
 from mpi4py import MPI
 
 sys.path.append('/global/homes/r/russ8/Functions')
-sys.path.append('/global/homes/r/russ8/fire_danger/')
 
 from DISTRIBUTED_COMPUTING import Slurm_info, retrieve_DL_model
 from TF_FUNCTIONS import tf_set_seeds, load_model, check_trial_files

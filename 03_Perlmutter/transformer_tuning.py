@@ -21,7 +21,6 @@ import random
 import copy
 
 sys.path.append('/global/homes/r/russ8/Functions')
-sys.path.append('/global/homes/r/russ8/fire_danger/')
 
 from DISTRIBUTED_COMPUTING import Slurm_info, retrieve_DL_model
 from TF_FUNCTIONS import tf_set_seeds, convert_to_TF_data_obj, make_keras_tuner_trials_paths

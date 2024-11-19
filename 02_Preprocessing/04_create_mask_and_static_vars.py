@@ -6,9 +6,8 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 import sys
-sys.path.append('/home/r62/repos/russ_repos/fire_danger/')
 sys.path.append('/home/r62/repos/russ_repos/Functions/')
-from FIRE_DANGER_FUNCTIONS import find_factors
+from STANDARD_FUNCTIONS import find_factors
 from DATA_ANALYSIS_FUNCTIONS import Assign_numbers_to_ordinal_vars
 
 CREATE_CUMULATIVE_MASK = True
