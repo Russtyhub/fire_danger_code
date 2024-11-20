@@ -43,8 +43,8 @@ The transformer model demonstrated strong performance for forecasting fire dange
 
 ### Key Metrics
 - **Correlation Range**: 0.85–0.98
-- Forecast period: Four weeks (July 2023)
-- produces results in 6 minutes and 20 seconds
+- **Forecast period**: Four weeks (July 2023)
+- **emulates forecasts in 6 minutes and 20 seconds**
 
 ---
 
