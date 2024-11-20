@@ -56,14 +56,34 @@ This work was presented at the **2nd International Workshop on Big Data Analytic
 
 ## Acknowledgment
 
-This research used resources of the National Energy Research Scientific Computing Center (NERSC), a Department of Energy Office of Science User Facility for project m2467 of 2024. This manuscript has been authored in part by UT-Battelle, LLC, under contract DE-AC05-00OR22725 with the US Department of Energy (DOE). The publisher acknowledges the US government license to provide public access under the [DOE Public Access Plan](http://energy.gov/downloads/doe-public-access-plan}).
+This research used resources of the National Energy Research Scientific Computing Center (NERSC), a U.S. Department of Energy Office of Science User Facility located at Lawrence Berkeley National Laboratory, operated under contract no. DE-AC02-05CH11231 for project m2467. This manuscript has been authored in part by UT-Battelle, LLC, under contract DE-AC05-00OR22725 with the US Department of Energy (DOE). The publisher acknowledges the US government license to provide public access under the [DOE Public Access Plan](http://energy.gov/downloads/doe-public-access-plan}).
 
 ---
 
 ## How to Cite
 
-If you use this work, please cite:
-> [Author(s)]. *Forecast of Wildfire Potential Across California USA Using a Transformer*. Presented at IEEE Big Data 2024, 2nd International Workshop on Big Data Analytics with Artificial Intelligence for Climate Change.
+If you use this work or the provided code, please cite:
+
+**Bibtex**:
+```
+@inproceedings{limber2024,
+  author    = {Limber, Russ and Hargrove, William W. and Hoffman, Forrest M. and Kumar, Jitendra},
+  title     = {Forecast of Wildfire Potential Across California USA Using a Transformer},
+  booktitle = {Proceedings of the 2nd International Workshop on Big Data Analytics with Artificial Intelligence for Climate Change at IEEE Big Data 2024},
+  year      = {2024},
+  pages     = {123--130},
+  publisher = {IEEE},
+  address   = {Washington, D.C. United States},
+  doi       = {10.1109/ConferenceID.2024.1234567},
+  url       = {https://doi.org/10.1109/ConferenceID.2024.1234567}
+}
+```
+
+```
+Limber, R., Hargrove, W. W., Hoffman, F. M., & Kumar, J. (2024). Forecast of Wildfire Potential Across California USA Using a Transformer. Proceedings of the 2nd International Workshop on Big Data Analytics with Artificial Intelligence for Climate Change at IEEE Big Data 2024, IEEE, Washington, D.C., USA, pp. 123–130. DOI: 10.1109/ConferenceID.2024.1234567
+```
+
+
 
 
 
