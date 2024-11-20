@@ -80,7 +80,10 @@ If you use this work or the provided code, please cite:
 ```
 
 ```
-Limber, R., Hargrove, W. W., Hoffman, F. M., & Kumar, J. (2024). Forecast of Wildfire Potential Across California USA Using a Transformer. Proceedings of the 2nd International Workshop on Big Data Analytics with Artificial Intelligence for Climate Change at IEEE Big Data 2024, IEEE, Washington, D.C., USA, pp. 123–130. DOI: 10.1109/ConferenceID.2024.1234567
+Limber, R., Hargrove, W. W., Hoffman, F. M., & Kumar, J. (2024). Forecast of Wildfire Potential 
+Across California USA Using a Transformer. Proceedings of the 2nd International Workshop on 
+Big Data Analytics with Artificial Intelligence for Climate Change at IEEE Big Data 2024, 
+IEEE, Washington, D.C., USA, pp. 123–130. DOI: 10.1109/ConferenceID.2024.1234567
 ```
 
 
