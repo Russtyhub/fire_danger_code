@@ -20,7 +20,7 @@ import random
 import copy
 from mpi4py import MPI
 
-sys.path.append('/global/homes/r/russ8/Functions')
+sys.path.append('/path/to/functions/')
 
 from DISTRIBUTED_COMPUTING import Slurm_info, retrieve_DL_model
 from TF_FUNCTIONS import tf_set_seeds, load_model, check_trial_files
@@ -40,7 +40,7 @@ DEEP_LEARNING_MODEL = 'Transformer'
 RUN_TITLE = f'Residual_{DEEP_LEARNING_MODEL}_final_sum'
 CARE_IF_ALL_TRIALS_RAN = False
 WHICH_MODEL = 'BUILD_HERE' # BEST_TUNED, BUILD_HERE, OTHER
-files_path = '/pscratch/sd/r/russ8/fire_danger/data' # no ending /
+data_directory = '/path/to/data' # no ending /
 sub_batch_size = 50000
 number_of_features = 16
     
@@ -169,8 +169,7 @@ os.environ['TF_GPU_ALLOCATOR'] = 'cuda_malloc_async'
 
 #############################################################################################################
 
-data_directory = '/pscratch/sd/r/russ8/fire_danger/data'
-RESULTS_PATH = f'/pscratch/sd/r/russ8/fire_danger/results/{RUN_TITLE}'
+RESULTS_PATH = f'{data_directory}/results/{RUN_TITLE}'
 
 gpus = tf.config.list_physical_devices('GPU')
 cpus = tf.config.list_physical_devices('CPU')
@@ -198,7 +197,7 @@ if slurm_rank == 0:
 ######################### IMPORTING DATA ###################################################
 
 # Importing data:
-static_vars = np.load('/pscratch/sd/r/russ8/fire_danger/data/full_static_vars.npy')
+static_vars = np.load(f'{data_directory}/full_static_vars.npy')
 files = produce_npy_files(data_directory)
 
 # This puts the last file of validation to be 06/30/2023 giving

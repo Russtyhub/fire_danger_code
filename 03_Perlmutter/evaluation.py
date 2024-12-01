@@ -19,20 +19,21 @@ number_of_features = 16
 model_number_in_checkpoints = 13
 
 RUN_TITLE = f'Residual_{DEEP_LEARNING_MODEL}_final_sum'
-data_directory = '/pscratch/sd/r/russ8/fire_danger/data'
-results_directory = f'/pscratch/sd/r/russ8/fire_danger/results/{RUN_TITLE}'
+data_directory = 'path/to/where/you/are/storing/project/data'
+results_directory = f'{data_directory}/results/{RUN_TITLE}'
+os.makedirs(results_directory, exist_ok=True)
 
-sys.path.append('/global/homes/r/russ8/Russ_deep_learning_models/')
+sys.path.append('/path/to/my/tf/keras/DL/models/')
 from Transformer import *
 
-sys.path.append('/global/homes/r/russ8/Functions')
+sys.path.append('/path/to/functions/')
 from TF_FUNCTIONS import load_model
 
-sys.path.append('/global/homes/r/russ8/fire_danger/')
+sys.path.append('./')
 from FIRE_DANGER_FUNCTIONS import produce_npy_files
 
 files = produce_npy_files(data_directory)
-full_static_vars = np.load('/pscratch/sd/r/russ8/fire_danger/meta_data/full_static_vars.npy')
+full_static_vars = np.load(f'{data_directory}/meta_data/full_static_vars.npy')
 
 # This puts the last file of validation to be 06/30/2023 giving
 # us an ideal place to view the fire season starting July 1st.

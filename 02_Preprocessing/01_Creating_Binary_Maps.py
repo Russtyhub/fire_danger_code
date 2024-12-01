@@ -12,10 +12,12 @@ from datetime import datetime, date
 import sys
 import time as TM
 
-sys.path.append('/home/r62/repos/russ_repos/Functions')
+sys.path.append('/path/to/functions/')
 from TIME import create_list_of_dates
 from STANDARD_FUNCTIONS import runcmd, do_all_files_exist
 PRINT = False
+
+data_path = 'path/to/where/you/are/storing/project/data'
 
 # Columns order: cos_rads, sin_rads, fire_danger_score, NDVI, prcp, srad, swe, tmax, tmin, vp
 daymet_vars = ['prcp', 'srad', 'swe', 'tmax', 'tmin', 'vp']
@@ -76,12 +78,19 @@ def find_closest_number(arr, target):
     return closest_idx
 
 # Defining paths:
-geojson_path = '/mnt/locutus/remotesensing/r62/fire_danger/California_State_Boundary/California_State_Boundary.geojson'
-fire_danger_path = '/mnt/locutus/remotesensing/r62/fire_danger/fire_danger_scores_V2'
-MODIS_path = '/mnt/locutus/remotesensing/r62/fire_danger/MODIS_NDVI_IMPORT_V2'
-daymet_path = '/mnt/locutus/remotesensing/r62/fire_danger/daymet'
-temporary_path = '/mnt/locutus/remotesensing/r62/fire_danger/temporary'
-binary_maps_path = '/mnt/locutus/remotesensing/r62/fire_danger/binary_data_maps_V2'
+geojson_path = f'{data_path}/California_State_Boundary/California_State_Boundary.geojson'
+fire_danger_path = f'{data_path}/fire_danger_scores'
+MODIS_path = f'{data_path}/MODIS_NDVI_IMPORT'
+daymet_path = f'{data_path}/daymet'
+temporary_path = f'{data_path}/temporary'
+binary_maps_path = f'{data_path}/binary_data_maps'
+fuels_path = f'{data_path}/fuels'
+
+os.makedirs(fire_danger_path, exist_ok=True)
+os.makedirs(MODIS_path, exist_ok=True)
+os.makedirs(temporary_path, exist_ok=True)
+os.makedirs(binary_maps_path, exist_ok=True)
+os.makedirs(fuels_path, exist_ok=True)
 
 start_date = date(2020, 1, 1)
 end_date = date(2023, 12, 31)
@@ -94,8 +103,8 @@ start = TM.time()
 # to the upcoming tiffs
 print('EXAMPLE FIRE DANGER POTENTIAL DATA')
 
-input_fire_danger_tif = '/mnt/locutus/remotesensing/r62/fire_danger/fire_danger_scores_V2/reproj_20211119_20211119.tiff'
-output_fire_danger_tif = '/mnt/locutus/remotesensing/r62/fire_danger/fire_danger_scores_V2/reproj_edges_clipped.tiff'
+input_fire_danger_tif = f'{fire_danger_path}/reproj_20211119_20211119.tiff'
+output_fire_danger_tif = f'{fire_danger_path}/reproj_edges_clipped.tiff'
 
 clip_tiff_with_geojson(input_fire_danger_tif, geojson_path, output_fire_danger_tif)
 
@@ -113,7 +122,7 @@ new_transform = from_origin(fire_danger_tif.transform[2],
 runcmd(f'rm {output_fire_danger_tif}')
 
 # Using transform and meta data on the fuels tiff
-fuels_tif = '/mnt/locutus/remotesensing/r62/fire_danger/fuels/fuels_resampled.tif'
+fuels_tif = f'{fuels_path}/fuels_resampled.tif'
 update_tiff(fuels_tif, f'{temporary_path}/reproj_fuels.tif')
 clip_tiff_with_geojson(f'{temporary_path}/reproj_fuels.tif', geojson_path, f'{temporary_path}/fuels.tif')
 runcmd(f'rm {temporary_path}/reproj_fuels.tif')

@@ -7,7 +7,7 @@
 #SBATCH -o ../Log_Output/tuning/%x_%j.out         # Standard output file
 #SBATCH -e ../Log_Output/tuning/%x_%j.err         # Standard error file
 #SBATCH -t 20:00:00                              # Time limit
-#SBATCH -A m2467                                 # Allocation account
+#SBATCH -A ACCOUNT_CODE                          # Allocation account
 #SBATCH -G 48                                    # Total number of GPUs requested
 #SBATCH --gpus-per-node=4                        # Number of GPUs per node
 

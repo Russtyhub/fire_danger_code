@@ -9,11 +9,12 @@ from datetime import date
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 
-sys.path.append('/home/r62/repos/russ_repos/Functions/')
+sys.path.append('/path/to/functions/')
 from STANDARD_FUNCTIONS import runcmd, format_with_zeros, read_pickle
 from TIME import create_list_of_dates
 
-os.chdir('/mnt/locutus/remotesensing/r62/fire_danger/binary_data_maps_V2/')
+data_path = 'path/to/where/you/are/storing/project/data'
+os.chdir(f'{data_path}/binary_data_maps_V2/')
 
 start_date = date(2020, 1, 1)
 end_date = date(2023, 12, 31)
@@ -66,8 +67,8 @@ maxes_df.columns = ['max_cos_rads', 'max_sin_rads', 'max_fire_danger_score_data'
 				   'max_NDVI', 'max_prcp', 'max_srad', 'max_swe', 'max_tmax', 'max_tmin', 'max_vp']
 maxes_df['filename'] = files_gathered
 
-mins_df.to_pickle('/mnt/locutus/remotesensing/r62/fire_danger/meta/binary_maps_mins.pkl')
-maxes_df.to_pickle('/mnt/locutus/remotesensing/r62/fire_danger/meta/binary_maps_maxes.pkl')
+mins_df.to_pickle(f'{data_path}/meta/binary_maps_mins.pkl')
+maxes_df.to_pickle(f'{data_path}/meta/binary_maps_maxes.pkl')
 
 # Plotting mins and maxes for each variable over their respective files
 
@@ -82,17 +83,20 @@ for idx, (min_col, max_col) in enumerate(zip(min_cols, max_cols)):
     axs[idx, 1].set_title(max_col.replace('_', ' '))
     axs[idx, 1].plot(maxes_df[max_col])
 	
-plt.savefig('/mnt/locutus/remotesensing/r62/fire_danger/images/mins_maxes_over_time.png', dpi=300)
+os.makedirs(f'{data_path}/images/', exist_ok=True)
+plt.savefig(f'{data_path}/images/mins_maxes_over_time.png', dpi=300)
 
 # Normalize the binary maps
 mins = np.array(mins_df.iloc[:, :-1].min())
 maxes = np.array(maxes_df.iloc[:, :-1].max())
+
+os.makedirs(f'{data_path}/normed_maps/', exist_ok=True)
 
 for FILE in tqdm(files_gathered, desc="Processing", unit="iteration"):
 	npy_file = np.load(FILE)
 	
 	# normalizing the arrays
 	normalized_data = (npy_file - mins[:, None, None]) / (maxes - mins)[:, None, None]
-	np.save(f'/mnt/locutus/remotesensing/r62/fire_danger/normed_maps_V2/{FILE}', normalized_data)
+	np.save(f'{data_path}/normed_maps/{FILE}', normalized_data)
 
 

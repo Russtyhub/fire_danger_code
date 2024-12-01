@@ -20,7 +20,7 @@ import json
 import random 
 import copy
 
-sys.path.append('/global/homes/r/russ8/Functions')
+sys.path.append('/path/to/functions/')
 
 from DISTRIBUTED_COMPUTING import Slurm_info, retrieve_DL_model
 from TF_FUNCTIONS import tf_set_seeds, convert_to_TF_data_obj, make_keras_tuner_trials_paths
@@ -70,8 +70,8 @@ os.environ['TF_KERAS'] = "1"
 os.environ['TF_GPU_ALLOCATOR'] = 'cuda_malloc_async'
 # tf.debugging.set_log_device_placement(True) # this turns the output into a mess! (might sometimes be useful however)
 
-data_directory = '/pscratch/sd/r/russ8/fire_danger/data'
-RESULTS_PATH = f'/pscratch/sd/r/russ8/fire_danger/results/{RUN_TITLE}'
+data_directory = '/path/to/data'
+RESULTS_PATH = f'{data_directory}/results/{RUN_TITLE}'
 
 gpus = tf.config.list_physical_devices('GPU')
 cpus = tf.config.list_physical_devices('CPU')
@@ -113,7 +113,7 @@ create_directory(paths_to_create, PRINT = False)
 ######################### IMPORTING DATA ###################################################
 
 # Importing data:
-static_vars = np.load('/pscratch/sd/r/russ8/fire_danger/data/full_static_vars.npy')
+static_vars = np.load(f'{data_directory}/full_static_vars.npy')
 files = produce_npy_files(data_directory)
 
 # This puts the last file of validation to be 06/30/2023 giving

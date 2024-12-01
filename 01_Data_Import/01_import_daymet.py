@@ -8,14 +8,16 @@ from pydap.client import open_url
 import xarray as xr
 import os
 import sys
-sys.path.append('/home/r62/repos/russ_repos/Functions')
+sys.path.append('/path/to/functions/')
 
 from STANDARD_FUNCTIONS import runcmd
 
 #########################################################################################################################
 
-geojson_path = '/mnt/locutus/remotesensing/r62/fire_danger/California_State_Boundary/California_State_Boundary.geojson'
-output_path = '/mnt/locutus/remotesensing/r62/fire_danger/daymet'
+data_path = 'path/to/where/you/are/storing/project/data'
+
+geojson_path = f'{data_path}/California_State_Boundary/California_State_Boundary.geojson'
+output_path = f'{data_path}/daymet'
 
 start_date = dt.datetime(2020, 1, 1)
 end_date = dt.datetime(2023, 12, 31)
@@ -24,6 +26,9 @@ VARS = ['prcp', 'srad', 'swe', 'tmax', 'tmin', 'vp'] # omitting dayl
 convert_to_tif = True
 
 ######################################################################################################
+
+os.makedirs(f'{data_path}/California_State_Boundary/', exist_ok=True)
+os.makedirs(f'{data_path}/daymet/', exist_ok=True)
 
 ca_geojson_4326 = gpd.read_file(geojson_path)
 ca_4326_bounds = ca_geojson_4326.bounds

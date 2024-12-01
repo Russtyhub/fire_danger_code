@@ -65,7 +65,7 @@ This research used resources of the National Energy Research Scientific Computin
 If you use this work or the provided code, please cite:
 
 **Bibtex**:
-```
+```bibtex
 @inproceedings{limber2024,
   author    = {Limber, Russ and Hargrove, William W. and Hoffman, Forrest M. and Kumar, Jitendra},
   title     = {Forecast of Wildfire Potential Across California USA Using a Transformer},

@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 # conda activate DL
-# python3 Building_transformer_dataset.py class_label (or All to include all classes of fuel type)
+# python3 Building_transformer_dataset.py 
+# class_label (or All to include all classes of fuel type)
 
 import os
 import sys
@@ -10,7 +11,7 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
-sys.path.append('/home/r62/repos/russ_repos/Functions/')
+sys.path.append('/path/to/functions/')
 from STANDARD_FUNCTIONS import runcmd, format_with_zeros, read_pickle
 from DATA_ANALYSIS_FUNCTIONS import Assign_numbers_to_ordinal_vars
 from TIME import create_list_of_dates
@@ -22,8 +23,12 @@ BATCH_SAMPLE = None
 start_date = date(2020, 1, 1)
 end_date = date(2023, 12, 31)
 LOOKBACK_WINDOW = 14
-DIR = '/mnt/locutus/remotesensing/r62/fire_danger/normed_maps_V2/'
-OUTPUT_DIR = f'/mnt/locutus/remotesensing/r62/fire_danger/pre_transformer/full_datasets/lookback_{LOOKBACK_WINDOW}'
+
+data_path = 'path/to/where/you/are/storing/project/data'
+DIR = f'{data_path}/normed_maps/'
+
+OUTPUT_DIR = f'{data_path}/pre_transformer/full_datasets/lookback_{LOOKBACK_WINDOW}'
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # The order of the numpy arrays:
 # cos_rads, sin_rads, fire_danger_score_data, NDVI, prcp, srad, swe, tmax, tmin, vp
@@ -31,10 +36,10 @@ OUTPUT_DIR = f'/mnt/locutus/remotesensing/r62/fire_danger/pre_transformer/full_d
 #####################################################################################################
 
 # importing the fuels data
-fuels_data = np.load('/mnt/locutus/remotesensing/r62/fire_danger/fuels/FINAL_FUELS_F40_DS_MODE.npy')
+fuels_data = np.load(f'{data_path}/fuels/FINAL_FUELS_F40_DS_MODE.npy')
 
 # importing my fuels key:
-Fuel_Data_Key = pd.read_csv('/mnt/locutus/remotesensing/r62/fire_danger/fuels/Fuels_Key_Editted.csv')
+Fuel_Data_Key = pd.read_csv(f'{data_path}/fuels/Fuels_Key_Editted.csv')
 
 def create_random_mask(n, num_true_values):
 	'''

@@ -7,8 +7,8 @@
 #SBATCH -o ../Log_Output/training/%x_%j.out      # Standard output file
 #SBATCH -e ../Log_Output/training/%x_%j.err      # Standard error file
 #SBATCH -t 20:00:00                              # Time limit
-#SBATCH -A m2467                                 # Allocation account
-#SBATCH -G 24                                     # Total number of GPUs requested
+#SBATCH -A ACCOUNT_CODE                          # Allocation account
+#SBATCH -G 24                                    # Total number of GPUs requested
 #SBATCH --gpus-per-node=4                        # Number of GPUs per node
 
 module load tensorflow/2.15.0

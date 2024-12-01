@@ -19,8 +19,8 @@ from TIME import create_list_of_dates
 
 ###########################################################
 
-data_path = '/mnt/locutus/remotesensing/r62/fire_danger/fire_danger_V2/'
-cal_geojson = "/mnt/locutus/remotesensing/r62/fire_danger/California_State_Boundary/California_State_Boundary.geojson"
+data_path = 'path/to/where/you/are/storing/project/data'
+cal_geojson = f'{data_path}/California_State_Boundary/California_State_Boundary.geojson'
 
 OVERWRITE = True
 start_date = date(2020, 1, 1)
@@ -28,6 +28,7 @@ end_date = date(2023, 12, 31)
 
 ###########################################################
 
+os.makedirs(f'{data_path}/meta/', exist_ok=True)
 dates = create_list_of_dates(start_date, end_date, 1)
 
 failed_files, days_of_week, dates_str = [], [], []
@@ -87,5 +88,5 @@ for file_time_stamp in dates_str:
 
 # Keeping record of fire danger values that did not import correctly
 failed_files = np.array(failed_files)
-np.save('/mnt/locutus/remotesensing/r62/fire_danger/meta/unavailable_fire_danger_files.npy', failed_files)
+np.save(f'{data_path}/meta/unavailable_fire_danger_files.npy', failed_files)
 

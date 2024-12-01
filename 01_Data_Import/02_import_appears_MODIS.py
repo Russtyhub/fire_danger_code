@@ -9,11 +9,12 @@ import geopandas as gpd
 
 api = 'https://appeears.earthdatacloud.nasa.gov/api/'
 
-user = getpass.getpass(prompt = 'Enter username (Russ_Earth_Data)')
-password = getpass.getpass(prompt = 'Enter password: (Rockytop0153!)')
+user = getpass.getpass(prompt = 'Enter username: ')
+password = getpass.getpass(prompt = 'Enter password: ')
 token_response = r.post(f'{api}login', auth=(user, password)).json()  # Insert API URL, call login service, provide credentials & return json
 
-shp_file_path = '/mnt/locutus/remotesensing/r62/fire_danger/California_State_Boundary/California_State_Boundary.shp'
+data_path = 'path/to/where/you/are/storing/project/data'
+shp_file_path = f'{data_path}/California_State_Boundary/California_State_Boundary.shp'
 task_name = input('Enter a Task Name: ')
 output_dir = '/mnt/locutus/remotesensing/r62/fire_danger'
 

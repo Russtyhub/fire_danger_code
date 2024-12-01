@@ -6,22 +6,23 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 import sys
-sys.path.append('/home/r62/repos/russ_repos/Functions/')
+sys.path.append('/path/to/functions/')
 from STANDARD_FUNCTIONS import find_factors
 from DATA_ANALYSIS_FUNCTIONS import Assign_numbers_to_ordinal_vars
 
 CREATE_CUMULATIVE_MASK = True
 CREATE_STATIC_VARS = True
 EDIT_FUELS_KEY = False
-fuels_data = np.load('/mnt/locutus/remotesensing/r62/fire_danger/fuels/FINAL_FUELS_F40_DS_MODE.npy')
-static_inputs_dir = '/mnt/locutus/remotesensing/r62/fire_danger/pre_transformer/full_datasets/static_inputs'
-data_dir = '/mnt/locutus/remotesensing/r62/fire_danger/pre_transformer/full_datasets/dynamic_inputs'
-meta_dir = '/mnt/locutus/remotesensing/r62/fire_danger/meta'
+data_path = 'path/to/where/you/are/storing/project/data'
+fuels_data = np.load(f'{data_path}/fuels/FINAL_FUELS_F40_DS_MODE.npy')
+static_inputs_dir = f'{data_path}/pre_transformer/full_datasets/static_inputs'
+data_dir = f'{data_path}/pre_transformer/full_datasets/dynamic_inputs'
+meta_dir = f'{data_path}/meta'
 WINDOW_SIZE = 30
 
 # edit the fuels data key:
 if EDIT_FUELS_KEY:
-    Fuel_Data_Key = pd.read_csv('/mnt/locutus/remotesensing/r62/fire_danger/fuels/Fuel_Data_Key.csv')
+    Fuel_Data_Key = pd.read_csv(f'{data_path}/fuels/Fuel_Data_Key.csv')
     Fuel_Data_Key.drop(['Class Description', 'Frequency (downsampled using mode)', 'Unnamed: 4'], axis = 1, inplace = True)
     mapping_dict = {'0': 0, 'very low': 1, 'low': 2, 'moderate': 3, 'high': 4, 'very high': 5, 'extreme': 6}
 
@@ -34,7 +35,7 @@ if EDIT_FUELS_KEY:
 
     Fuel_Data_Key['Flame length'] = Fuel_Data_Key['Flame length'].astype('int16')
     Fuel_Data_Key['Rate of spread'] = Fuel_Data_Key['Rate of spread'].astype('int16')
-    Fuel_Data_Key.to_csv('/mnt/locutus/remotesensing/r62/fire_danger/fuels/Fuels_Key_Editted.csv')
+    Fuel_Data_Key.to_csv(f'{data_path}/fuels/Fuels_Key_Editted.csv')
 
 print('How I arrived at a batch size of 929')
 number = 121699 # number of values that are always available (main mask)
@@ -75,7 +76,7 @@ if CREATE_STATIC_VARS:
     fuels_data = fuels_data.flatten()
     # fuels_data = fuels_data[~mask]
 
-    fuels_data_key = pd.read_csv("/mnt/locutus/remotesensing/r62/fire_danger/fuels/Fuels_Key_Editted.csv")
+    fuels_data_key = pd.read_csv(f'{data_path}/fuels/Fuels_Key_Editted.csv')
     fuels_data_key.drop(['Unnamed: 0', 'Class Label'], axis = 1, inplace = True)
 
     for col in fuels_data_key:

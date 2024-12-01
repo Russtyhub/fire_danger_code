@@ -7,7 +7,7 @@
 #SBATCH -o ../Log_Output/evaluation/%x_%j.out    # Standard output file
 #SBATCH -e ../Log_Output/evaluation/%x_%j.err    # Standard error file
 #SBATCH -t 00:30:00                              # Time limit
-#SBATCH -A m2467                                 # Allocation account
+#SBATCH -A ACCOUNT_CODE                          # Allocation account
 
 module load tensorflow/2.15.0
 
