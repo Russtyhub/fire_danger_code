@@ -20,12 +20,10 @@ import json
 import random 
 import copy
 
-sys.path.append('/path/to/functions/')
+sys.path.append('../')
 
-from DISTRIBUTED_COMPUTING import Slurm_info, retrieve_DL_model
-from TF_FUNCTIONS import tf_set_seeds, convert_to_TF_data_obj, make_keras_tuner_trials_paths
-from STANDARD_FUNCTIONS import create_directory, delete_everything_in_directory
-from FIRE_DANGER_FUNCTIONS import *
+from resources import Slurm_info, make_keras_tuner_trials_paths, create_directory, delete_everything_in_directory, \
+        produce_npy_files 
 
 ####################################  PARAMETERS #############################################################
 
@@ -44,6 +42,12 @@ number_of_features = 16
 RUN_TITLE = f'Residual_{DEEP_LEARNING_MODEL}_final'
 
 ############################ SETTING THE ENVIRONMENT #######################################################
+
+def tf_set_seeds(seed):
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    random.seed(seed)
+    tf.random.set_seed(seed)
+    np.random.seed(seed)
 
 tf_set_seeds(SEED)
 slurm_info = Slurm_info()
@@ -138,8 +142,8 @@ if strategy:
 
         METRIC = METRIC.upper()
         METRICS = [tf.keras.metrics.MeanSquaredError(name='MSE')]
-
-        model = retrieve_DL_model(DEEP_LEARNING_MODEL)        
+        
+        from Transformer import Transformer as model
         model = model(input_shape = (WINDOW_SIZE, number_of_features),
                              # batch_size = BATCH_SIZE,
                              sub_batch_size = sub_batch_size,
@@ -154,7 +158,7 @@ else:
     METRIC = METRIC.upper()
     METRICS = [tf.keras.metrics.MeanSquaredError(name='MSE')]
 
-    model = retrieve_DL_model(DEEP_LEARNING_MODEL)
+    from Transformer import Transformer as model
     model = model(input_shape = (WINDOW_SIZE, number_of_features),
                          # batch_size = BATCH_SIZE,
                          sub_batch_size = sub_batch_size,

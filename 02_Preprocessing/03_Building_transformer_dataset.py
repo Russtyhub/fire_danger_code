@@ -11,10 +11,8 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
-sys.path.append('/path/to/functions/')
-from STANDARD_FUNCTIONS import runcmd, format_with_zeros, read_pickle
-from DATA_ANALYSIS_FUNCTIONS import Assign_numbers_to_ordinal_vars
-from TIME import create_list_of_dates
+sys.path.append('../')
+from resources import create_list_of_dates
 
 ######## PARAMETERS #################################################################################
 

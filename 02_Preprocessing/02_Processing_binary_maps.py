@@ -9,9 +9,8 @@ from datetime import date
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 
-sys.path.append('/path/to/functions/')
-from STANDARD_FUNCTIONS import runcmd, format_with_zeros, read_pickle
-from TIME import create_list_of_dates
+sys.path.append('../')
+from resources create_list_of_dates, format_with_zeros
 
 data_path = 'path/to/where/you/are/storing/project/data'
 os.chdir(f'{data_path}/binary_data_maps_V2/')

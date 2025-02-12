@@ -10,12 +10,9 @@ import rasterio
 from datetime import date, datetime
 import os
 import sys
-path_to_functions_dir = '/home/r62/repos/russ_repos/Functions'
-sys.path.append(path_to_functions_dir)
+sys.path.append('../')
 
-from REMOTE_SENSING_FUNCTIONS import clip_tiff_with_geojson
-from STANDARD_FUNCTIONS import runcmd
-from TIME import create_list_of_dates
+from resources import runcmd, clip_tiff_with_geojson, create_list_of_dates 
 
 ###########################################################
 

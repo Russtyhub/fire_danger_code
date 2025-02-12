@@ -12,9 +12,8 @@ from datetime import datetime, date
 import sys
 import time as TM
 
-sys.path.append('/path/to/functions/')
-from TIME import create_list_of_dates
-from STANDARD_FUNCTIONS import runcmd, do_all_files_exist
+sys.path.append('../')
+from resources import runcmd, create_list_of_dates, do_all_files_exist
 PRINT = False
 
 data_path = 'path/to/where/you/are/storing/project/data'

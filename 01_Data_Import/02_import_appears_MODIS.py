@@ -16,7 +16,7 @@ token_response = r.post(f'{api}login', auth=(user, password)).json()  # Insert A
 data_path = 'path/to/where/you/are/storing/project/data'
 shp_file_path = f'{data_path}/California_State_Boundary/California_State_Boundary.shp'
 task_name = input('Enter a Task Name: ')
-output_dir = '/mnt/locutus/remotesensing/r62/fire_danger'
+output_dir = 'path/to/where/you/want/to/store/MODIS/data/'
 
 # SETTING UP MY TOKEN:
 del user, password

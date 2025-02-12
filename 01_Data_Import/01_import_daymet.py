@@ -8,9 +8,9 @@ from pydap.client import open_url
 import xarray as xr
 import os
 import sys
-sys.path.append('/path/to/functions/')
+sys.path.append('../')
 
-from STANDARD_FUNCTIONS import runcmd
+from resources import runcmd
 
 #########################################################################################################################
 

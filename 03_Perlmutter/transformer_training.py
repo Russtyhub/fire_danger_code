@@ -20,11 +20,9 @@ import random
 import copy
 from mpi4py import MPI
 
-sys.path.append('/path/to/functions/')
-
-from DISTRIBUTED_COMPUTING import Slurm_info, retrieve_DL_model
-from TF_FUNCTIONS import tf_set_seeds, load_model, check_trial_files
-from FIRE_DANGER_FUNCTIONS import *
+sys.path.append('../')
+from resources import Slurm_info, check_trial_files, produce_npy_files, \
+        random_select, generator 
 
 ####################################  PARAMETERS #############################################################
 
@@ -46,61 +44,17 @@ number_of_features = 16
     
 ############################ SETTING THE ENVIRONMENT #######################################################
 
+def load_model(path):
+    return tf.keras.models.load_model(path)
+
+def tf_set_seeds(seed):
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    random.seed(seed)
+    tf.random.set_seed(seed)
+    np.random.seed(seed)
+
 tf_set_seeds(SEED)
 slurm_info = Slurm_info()
-
-def random_select(X, y, sub_batch_size, static_vars):
-
-    n = X.shape[0]
-    if n > sub_batch_size:
-        indices = np.random.choice(n, size=sub_batch_size, replace=False)
-        selected_X = X[indices]
-        selected_y = y[indices]
-        selected_static = static_vars[indices]
-    else:
-        selected_X = X
-        selected_y = y
-        selected_static = static_vars
-
-    return selected_X, selected_y, selected_static
-
-
-def generator(files, batch_size, static_vars):
-
-    mask3 = ~np.any(np.isnan(static_vars), axis=(1, 2))
-
-    while True:
-        for idx, file in enumerate(files):
-            if idx == int(len(files) - 1):
-                continue
-
-            mmap_arr_X = np.load(file, mmap_mode = 'r')
-            mmap_arr_X = mmap_arr_X.astype('float32')
-            mask1 = ~np.any(np.isnan(mmap_arr_X), axis=(1, 2))
-
-            mmap_arr_y = np.load(files[idx+1], mmap_mode = 'r')
-            mmap_arr_y = mmap_arr_y[:, -1, 2].astype('float32')
-            mask2 = ~np.isnan(mmap_arr_y)
-
-            mask = mask1*mask2*mask3
-
-            mmap_arr_X = mmap_arr_X[mask]         
-            mmap_arr_y = mmap_arr_y[mask]
-            static_vars_masked = static_vars[mask]
-
-            mmap_arr_X, mmap_arr_y, static_vars_masked = random_select(mmap_arr_X, 
-                                                                       mmap_arr_y,
-                                                                       sub_batch_size, 
-                                                                       static_vars)
-
-            mmap_arr_X = np.concatenate([mmap_arr_X, static_vars_masked], axis = 2).astype('float32')
-            splits = np.ceil(mmap_arr_X.shape[0]/batch_size)
-            split_X = np.array_split(mmap_arr_X, splits, axis = 0)
-            split_y = np.array_split(mmap_arr_y, splits, axis = 0)
-
-            for X, y in zip(split_X, split_y):
-                # print(X.shape, y.shape)
-                yield X, y
 
 #synchronize all nodes:
 comm = MPI.COMM_WORLD
@@ -228,7 +182,7 @@ if strategy:
 
         METRICS = [tf.keras.metrics.MeanSquaredError(name='MSE')]
 
-        model = retrieve_DL_model(DEEP_LEARNING_MODEL)        
+        from Transformer import Transformer as model
         model = model(input_shape = (WINDOW_SIZE, number_of_features),
                              optimizer='adam',
                              loss='MSE',
@@ -241,7 +195,7 @@ else:
     
     METRICS = [tf.keras.metrics.MeanSquaredError(name='MSE')]
     
-    model = retrieve_DL_model(DEEP_LEARNING_MODEL)
+    from Transformer import Transformer as model
     model = model(input_shape = (WINDOW_SIZE, number_of_features),
                          optimizer='adam',
                          loss='MSE',

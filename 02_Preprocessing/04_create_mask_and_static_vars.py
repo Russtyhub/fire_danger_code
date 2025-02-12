@@ -6,9 +6,8 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 import sys
-sys.path.append('/path/to/functions/')
-from STANDARD_FUNCTIONS import find_factors
-from DATA_ANALYSIS_FUNCTIONS import Assign_numbers_to_ordinal_vars
+sys.path.append('../')
+from resources import find_factors, Assign_numbers_to_ordinal_vars
 
 CREATE_CUMULATIVE_MASK = True
 CREATE_STATIC_VARS = True

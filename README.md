@@ -66,24 +66,21 @@ If you use this work or the provided code, please cite:
 
 **Bibtex**:
 ```bibtex
-@inproceedings{limber2024,
-  author    = {Limber, Russ and Hargrove, William W. and Hoffman, Forrest M. and Kumar, Jitendra},
-  title     = {Forecast of Wildfire Potential Across California USA Using a Transformer},
-  booktitle = {Proceedings of the 2nd International Workshop on Big Data Analytics with Artificial Intelligence for Climate Change at IEEE Big Data 2024},
-  year      = {2024},
-  pages     = {123--130},
-  publisher = {IEEE},
-  address   = {Washington, D.C. United States},
-  doi       = {10.1109/ConferenceID.2024.1234567},
-  url       = {https://doi.org/10.1109/ConferenceID.2024.1234567}
-}
+@INPROCEEDINGS{Limber2024,
+	author={Limber, Russ and Hargrove, William W. and Hoffman, Forrest M. and Kumar, Jitendra},
+	booktitle={2024 IEEE International Conference on Big Data (BigData)}, 
+	title={Forecast of Wildfire Potential Across California USA Using a Transformer}, 
+	year={2024},
+	volume={},
+	number={},
+	pages={4342-4350},
+	keywords={Surveys;Wildfires;Normalized difference vegetation index;Geology;Weather forecasting;Predictive models;Transformers;Fuels;Indexes;MODIS;transformer;residual connection;wildfires;time series;remote sensing},
+	doi={10.1109/BigData62323.2024.10825778}}
 ```
 
 ```
-Limber, R., Hargrove, W. W., Hoffman, F. M., & Kumar, J. (2024). Forecast of Wildfire Potential 
-Across California USA Using a Transformer. Proceedings of the 2nd International Workshop on 
-Big Data Analytics with Artificial Intelligence for Climate Change at IEEE Big Data 2024, 
-IEEE, Washington, D.C., USA, pp. 123–130. DOI: 10.1109/ConferenceID.2024.1234567
+R. Limber, W. W. Hargrove, F. M. Hoffman and J. Kumar, "Forecast of Wildfire Potential Across California USA Using a Transformer," 2024 IEEE International Conference on Big Data (BigData), Washington, DC, USA, 2024, pp. 4342-4350, doi: 10.1109/BigData62323.2024.10825778.
+keywords: {Surveys;Wildfires;Normalized difference vegetation index;Geology;Weather forecasting;Predictive models;Transformers;Fuels;Indexes;MODIS;transformer;residual connection;wildfires;time series;remote sensing},
 ```
 
 
